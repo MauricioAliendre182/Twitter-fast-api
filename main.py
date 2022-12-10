@@ -1,13 +1,14 @@
 # Python
 from uuid import UUID
 from datetime import date
+from datetime import datetime
 from typing import Optional
-from wsgiref.validate import validator
 
 # Pydantic
 from pydantic import BaseModel
 from pydantic import EmailStr
 from pydantic import Field
+from pydantic import validator
 
 # FastAPI
 from fastapi import FastAPI
@@ -28,6 +29,7 @@ class UserLogin(UserBase):
     password: str = Field(
         ...,
         min_length=8,
+        max_length=64,
         regex="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$",
         description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number and one special character.",
     )
@@ -37,7 +39,7 @@ class User(UserBase):
         min_length=1,
         max_length=50
     )
-    last_name: date = Field(
+    last_name: str = Field(
         ...,
         min_length=1,
         max_length=50
@@ -55,7 +57,15 @@ class User(UserBase):
             return v
 
 class Tweet(BaseModel):
-    pass
+    tweet_id: UUID = Field(...)
+    content: str = Field(
+        ..., 
+        min_length = 1, 
+        max_length=256
+    )
+    created_at: datetime = Field(default=datetime.now())
+    update_at: Optional[datetime] = Field(default=None)
+    by: User = Field(...)
 
 
 @app.get(

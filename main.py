@@ -2,7 +2,11 @@
 from uuid import UUID
 from datetime import date
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
+
+# DB
+from db.database import Base
+from sqlalchemy import Column, Integer, String, Boolean, DateTime
 
 # Pydantic
 from pydantic import BaseModel
@@ -20,12 +24,14 @@ app = FastAPI()
 
 # Defining the models
 class UserBase(BaseModel):
+    __tablename__ = "UserBase",
     # What should a user have?
     # UUID: Special class of Python to have a unique ID
     user_id: UUID = Field(...)
     email: EmailStr = Field(..., example="example@hotmail.com") 
 
 class UserLogin(UserBase):
+    __tablename__ = "UserLogin"
     password: str = Field(
         ...,
         min_length=8,
@@ -33,6 +39,7 @@ class UserLogin(UserBase):
         regex="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$",
         description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number and one special character.",
     )
+
 class User(UserBase):
     first_name: str = Field(
         ...,
@@ -67,7 +74,86 @@ class Tweet(BaseModel):
     update_at: Optional[datetime] = Field(default=None)
     by: User = Field(...)
 
+# Path Operations
+@app.get(
+    path="/",
+    status_code=status.HTTP_200_OK
+)
+def home():
+    return {"Twitter API": "Working!"}
+## Users
+## The client will send the information
+@app.post(
+    path="/signup",
+    response_model=User,
+    status_code=status.HTTP_201_CREATED,
+    summary="Register a User",
+    tags=["Users"]
+)
+def signup():
+    pass
 
+@app.post(
+    path="/login",
+    response_model=User,
+    status_code=status.HTTP_200_OK,
+    summary="Login a User",
+    tags=["Users"]
+)
+def login():
+    pass
+
+@app.post(
+    path="/users",
+    response_model=List[User],
+    status_code=status.HTTP_200_OK,
+    summary="Show all users",
+    tags=["Users"]
+)
+def show_all_users():
+    pass
+
+@app.get(
+    path="/users",
+    response_model=List[User],
+    status_code=status.HTTP_200_OK,
+    summary="Show all users",
+    tags=["Users"]
+)
+def show_all_users():
+    pass
+
+@app.get(
+    path="/users/{user_id}",
+    response_model=User,
+    status_code=status.HTTP_200_OK,
+    summary="Show a user",
+    tags=["Users"]
+)
+def show_a_user():
+    pass
+
+@app.post(
+    path="/users/{user_id}/delete",
+    response_model=User,
+    status_code=status.HTTP_200_OK,
+    summary="Delete a User",
+    tags=["Users"]
+)
+def delete_a_user():
+    pass
+
+@app.put(
+    path="/users/{user_id}/update",
+    response_model=User,
+    status_code=status.HTTP_200_OK,
+    summary="Update a User",
+    tags=["Users"]
+)
+def update_a_user():
+    pass
+
+## Tweets
 @app.get(
     path="/",
     status_code=status.HTTP_200_OK

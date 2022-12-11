@@ -1,15 +1,104 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+import psycopg2
 
-# Make the conection
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:M@ps5250864POST@lochasthost:5432/fastAPI_database"
 
-# engine: Interact with DB
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+class Db():
+    
+    connection = None
 
-# Know how is the data
-SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+    def __init__(self) -> None:
+        
+        try:
+            self.connection = psycopg2.connect(
+                host="db",
+                user="root",
+                password="R2D2-333",
+                database="DataBase",
+                port="5432"
+            )
+            print("Connection OK")
 
-# Declarative base: To start to create our models
-Base = declarative_base()
+        except psycopg2.Error as err:
+            print(f">>> DbError =   {err.pgcode} : {err.pgerror}")
+            self.connection = None
+
+
+    def insertTweet(self, data: dict, table: str):
+
+        if self.connection != None:
+
+            keys = list(data.keys())
+            values = list(data.values())
+            pointer = self.connection.cursor()
+            query = f""" INSERT INTO {table} ({keys[0]}, {keys[1]}, {keys[2]}, {keys[3]})
+                            VALUES ({values[0]},{values[1]},{values[2]},{values[3]}) """
+
+            try:
+                pointer.execute(query)
+                self.connection.commit()
+            except psycopg2.Error as err:
+                e = {}
+                e[f"{err.pgcode}"] = err.pgerror
+                return e
+            finally:
+                pointer.close()
+            return data
+
+
+    def readTweet(self, user_id: int, table: str):
+
+        if self.connection != None:
+
+            pointer = self.connection.cursor()
+            query = f""" SELECT * FROM {table}
+                        WHERE id={user_id} """
+
+            try:
+                pointer.execute(query)
+                self.connection.commit()
+                data = pointer.fetchone()
+            except psycopg2.Error as err:
+                e = {}
+                e[f"{err.pgcode}"] = err.pgerror
+                return e
+            finally:
+                pointer.close()        
+            return data
+
+
+    def updateTweet(self, data: dict, table: str, user_id: int):
+
+        if self.connection != None:
+            keys = list(data.keys())
+            values = list(data.values())
+            pointer = self.connection.cursor()
+            query = f""" UPDATE {table}
+                        SET {keys[0]}={values[0]},{keys[1]}={values[1]},{keys[2]}={values[2]},{keys[3]}={values[3]}'
+                        WHERE id={user_id} """
+            try:
+                pointer.execute(query)
+                self.connection.commit()
+            except psycopg2.Error as err:
+                e={}
+                e[f"{err.pgcode}"]= err.pgerror
+                return (e)        
+            finally:
+                pointer.close()
+            return data
+
+
+    def deleteTweet(self, user_id: int, table: str):
+
+        if self.connection != None:
+            pointer = self.connection.cursor()
+            query = f""" DELETE FROM {table}
+                        WHERE id={user_id} """
+            try:
+                pointer.execute(query)
+                self.connection.commit()
+            except psycopg2.Error as err:
+                e = {}
+                e[f"{err.pgcode}"] = err.pgerror
+                return (e)
+            finally:
+                pointer.close()
+            return user_id

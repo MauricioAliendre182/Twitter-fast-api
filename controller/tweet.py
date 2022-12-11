@@ -1,8 +1,11 @@
 from typing import List
 from fastapi import APIRouter, status
 from models.Tweets import Tweets
+from db import database
+from time import sleep
 
-
+sleep(10)
+db = database()
 router = APIRouter(
     prefix="/tweets",
     tags=["Tweets"]
@@ -25,8 +28,14 @@ def home():
     status_code=status.HTTP_201_CREATED,
     summary="Post a Tweet",
 )
-def post():
-    pass
+def post(tweet_data: Tweets):
+    tweet = Tweets.dict()
+    tweet["tweet_id"] = str(tweet["tweet_id"])
+    tweet["content"] = str(tweet["content"])
+    tweet["created_at"] = str(tweet["created_at"])
+    tweet["update_at"] = str(tweet["update_at"])
+    data = db.insertTweet(tweet, "tweets")
+    return data
 
 ### Show a Tweet
 @router.get(

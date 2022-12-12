@@ -1,11 +1,11 @@
 from typing import List
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Body
 from models.Tweets import Tweets
 from db import database
 from time import sleep
 
 sleep(10)
-db = database()
+db = database.Db()
 router = APIRouter(
     prefix="/tweets",
     tags=["Tweets"]
@@ -24,17 +24,25 @@ def home():
 ### Post a Tweet
 @router.post(
     path="/post",
-    response_model=Tweets,
+    # response_model=Tweets,
     status_code=status.HTTP_201_CREATED,
-    summary="Post a Tweet",
+    summary="Post a Tweet"
 )
-def post(tweet_data: Tweets):
-    tweet = Tweets.dict()
+def post(tweet_data: Tweets = Body(...)):
+    """
+    This path operation registers a Tweet in the app
+
+    Parameters:
+      - Request body parameter
+            - Tweet: Tweets
+    Returns a json with tweet information posted
+    """
+    tweet = tweet_data.dict()
     tweet["tweet_id"] = str(tweet["tweet_id"])
     tweet["content"] = str(tweet["content"])
     tweet["created_at"] = str(tweet["created_at"])
     tweet["update_at"] = str(tweet["update_at"])
-    data = db.insertTweet(tweet, "tweets")
+    data = db.insertTweet(tweet)
     return data
 
 ### Show a Tweet

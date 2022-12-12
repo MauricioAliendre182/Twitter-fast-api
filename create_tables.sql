@@ -15,7 +15,7 @@ create table tweets (
 	content VARCHAR(280) NOT NULL,
 	created_at VARCHAR(50) NOT NULL,
 	update_at VARCHAR(50) NOT NULL,
-	CONSTRAINT id_pk PRIMARY KEY (id),
+	PRIMARY KEY (id),
 	FOREIGN KEY (id)
 		REFERENCES users (id)
 		ON DELETE CASCADE
@@ -24,7 +24,7 @@ create table tweets (
 create table password (
 	id serial NOT NULL,
 	password VARCHAR(50) NOT NULL,
-	CONSTRAINT id_pk PRIMARY KEY (id),
+	PRIMARY KEY (id),
 	FOREIGN KEY (id)
 		REFERENCES users (id)
 		ON DELETE CASCADE

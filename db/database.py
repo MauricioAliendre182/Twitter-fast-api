@@ -22,15 +22,15 @@ class Db():
             self.connection = None
 
 
-    def insertTweet(self, data: dict, table: str):
+    def insertTweet(self, data: dict):
 
         if self.connection != None:
 
             keys = list(data.keys())
             values = list(data.values())
             pointer = self.connection.cursor()
-            query = f""" INSERT INTO {table} ({keys[0]}, {keys[1]}, {keys[2]}, {keys[3]})
-                            VALUES ({values[0]},{values[1]},{values[2]},{values[3]}) """
+            query = f""" INSERT INTO tweets ({keys[0]}, {keys[1]}, {keys[2]}, {keys[3]})
+                            VALUES ('{values[0]}','{values[1]}','{values[2]}','{values[3]}') """
 
             try:
                 pointer.execute(query)
@@ -44,12 +44,12 @@ class Db():
             return data
 
 
-    def readTweet(self, user_id: int, table: str):
+    def readTweet(self, user_id: int):
 
         if self.connection != None:
 
             pointer = self.connection.cursor()
-            query = f""" SELECT * FROM {table}
+            query = f""" SELECT * FROM tweets
                         WHERE id={user_id} """
 
             try:
@@ -65,14 +65,14 @@ class Db():
             return data
 
 
-    def updateTweet(self, data: dict, table: str, user_id: int):
+    def updateTweet(self, data: dict, user_id: int):
 
         if self.connection != None:
             keys = list(data.keys())
             values = list(data.values())
             pointer = self.connection.cursor()
-            query = f""" UPDATE {table}
-                        SET {keys[0]}={values[0]},{keys[1]}={values[1]},{keys[2]}={values[2]},{keys[3]}={values[3]}'
+            query = f""" UPDATE tweets
+                        SET {keys[0]}='{values[0]}',{keys[1]}='{values[1]}',{keys[2]}='{values[2]}',{keys[3]}='{values[3]}'
                         WHERE id={user_id} """
             try:
                 pointer.execute(query)
@@ -86,11 +86,93 @@ class Db():
             return data
 
 
-    def deleteTweet(self, user_id: int, table: str):
+    def deleteTweet(self, user_id: int):
 
         if self.connection != None:
             pointer = self.connection.cursor()
-            query = f""" DELETE FROM {table}
+            query = f""" DELETE FROM tweets
+                        WHERE id={user_id} """
+            try:
+                pointer.execute(query)
+                self.connection.commit()
+            except psycopg2.Error as err:
+                e = {}
+                e[f"{err.pgcode}"] = err.pgerror
+                return (e)
+            finally:
+                pointer.close()
+            return user_id
+    
+    def insertUser(self, data: dict):
+
+        if self.connection != None:
+
+            keys = list(data.keys())
+            values = list(data.values())
+            print(values[0])
+            pointer = self.connection.cursor()
+            query = f""" INSERT INTO users ({keys[0]}, {keys[1]}, {keys[2]}, {keys[3]}, {keys[4]}, {keys[5]})
+                            VALUES ('{values[0]}','{values[1]}','{values[2]}','{values[3]}','{values[4]}','{values[5]}') """
+
+            try:
+                pointer.execute(query)
+                self.connection.commit()
+            except psycopg2.Error as err:
+                e = {}
+                e[f"{err.pgcode}"] = err.pgerror
+                return e
+            finally:
+                pointer.close()
+            return data
+
+
+    def readUser(self, user_id: int):
+
+        if self.connection != None:
+
+            pointer = self.connection.cursor()
+            query = f""" SELECT * FROM users
+                        WHERE id={user_id} """
+
+            try:
+                pointer.execute(query)
+                self.connection.commit()
+                data = pointer.fetchone()
+            except psycopg2.Error as err:
+                e = {}
+                e[f"{err.pgcode}"] = err.pgerror
+                return e
+            finally:
+                pointer.close()        
+            return data
+
+
+    def updateUser(self, data: dict, user_id: int):
+
+        if self.connection != None:
+            keys = list(data.keys())
+            values = list(data.values())
+            pointer = self.connection.cursor()
+            query = f""" UPDATE users
+                        SET {keys[0]}='{values[0]}',{keys[1]}='{values[1]}',{keys[2]}='{values[2]}',{keys[3]}='{values[3]}',{keys[4]}='{values[4]}',{keys[5]}='{values[5]}'
+                        WHERE id={user_id} """
+            try:
+                pointer.execute(query)
+                self.connection.commit()
+            except psycopg2.Error as err:
+                e={}
+                e[f"{err.pgcode}"]= err.pgerror
+                return (e)        
+            finally:
+                pointer.close()
+            return data
+
+
+    def deleteUser(self, user_id: int):
+
+        if self.connection != None:
+            pointer = self.connection.cursor()
+            query = f""" DELETE FROM users
                         WHERE id={user_id} """
             try:
                 pointer.execute(query)

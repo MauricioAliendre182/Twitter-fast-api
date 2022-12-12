@@ -1,8 +1,12 @@
 from typing import List
-from fastapi import APIRouter, status
-from models.User import User
+from fastapi import APIRouter, status, Body
+from models.User import UserRegister, User
+from db import database
+from time import sleep
 
 
+sleep(10)
+db = database.Db()
 router = APIRouter(
     prefix="/users",
     tags=["Users"]
@@ -25,15 +29,19 @@ def signup():
 ### User login
 @router.post(
     path="/login",
-    response_model=User,
     status_code=status.HTTP_200_OK,
-    summary="Login a User",
-    tags=["Users"]
+    summary="Login a User"
 )
-def login():
-    pass
-
-    pass
+def login(user_data: UserRegister=Body(...)):
+    user = user_data.dict()
+    user["user_id"] = str(user["user_id"])
+    user["email"] = str(user["email"])
+    user["first_name"] = str(user["first_name"])
+    user["last_name"] = str(user["last_name"])
+    user["birth_date"] = str(user["birth_date"])
+    user["password"] = str(user["password"])
+    data = db.insertUser(user)
+    return data
 
 ### Show all users
 @router.get(

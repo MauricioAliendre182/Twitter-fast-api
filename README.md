@@ -32,13 +32,11 @@ The project is based in a CRUD project done for the user [jrpinzong] specificall
 
 ![image](https://user-images.githubusercontent.com/86843637/208323872-d7946d27-9505-4603-94cd-983c1c66b44a.png)
 
-> Secondly go to the [docker-compose.yml] file and verify if the version matches, If that is not the case change the version to the docker-compose version
+> Secondly go to the `docker-compose.yml` file and verify if the version matches, If that is not the case change the version to the docker-compose version
 
 ![image](https://user-images.githubusercontent.com/86843637/208324014-22ee7792-0c02-4099-8149-8c50c112e0ab.png)
 
 > Lastly execute the command `docker-compose up` on your terminal, the corresponding images will be dowonload and the containers will be active
-
-![image](https://user-images.githubusercontent.com/86843637/208324554-5a221b3d-ddd7-4ec9-becc-32199d5cbcb9.png)
 
 ### Fourth Step: Create the Tables in pgAdmin
 > Go to the link: http://localhost/, once there in pgAdmin introduce `admin@admin.com` as Email and `admin` as password
@@ -50,6 +48,8 @@ The project is based in a CRUD project done for the user [jrpinzong] specificall
 
 > In DataBase go directly to Schemas > Tables and in the Query Tool introduce the commands stated in `create_tables.sql`
 > This will create three tables Users, Password and Tweets
+
+![image](https://user-images.githubusercontent.com/86843637/208324554-5a221b3d-ddd7-4ec9-becc-32199d5cbcb9.png)
 
 ### Fifth Step: Start with FastAPI
 > Go to the link: http://localhost:8000/docs, now you can create, read, update and delete a User or a Tweet

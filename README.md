@@ -2,7 +2,7 @@
 ## This project is focused on a Twitter api done with Fast-api
 
 This project is a Twitter API done with FastAPI, PostgreSQL and Docker
-The project is based in a CRUD project done for the user [jrpinzong] specifically from the next repository https://github.com/jrpinzong/CRUD-Rest-Docker-Fastapi-ProgreSQL where he used PostgreSQL as Database
+The project is based in a CRUD project done for the user `jrpinzong` specifically from the next repository https://github.com/jrpinzong/CRUD-Rest-Docker-Fastapi-ProgreSQL where he used PostgreSQL as Database
 
 ## Version: 1.0
 ## Features and Tools

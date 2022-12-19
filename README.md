@@ -19,6 +19,8 @@ The project is based in a CRUD project done for the user `jrpinzong` specificall
 
 > Open Docker Desktop
 
+![image](https://user-images.githubusercontent.com/86843637/208489175-9bfed906-4b0f-408d-9f04-d01bfe514ce2.png)
+
 ### Second Step: Copy the repository and install the requirements.txt
 - `git clone https://github.com/MauricioAliendre182/Twitter-fast-api.git`
 - `cd Twitter-fast-api`

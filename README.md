@@ -40,13 +40,17 @@ The project is based in a CRUD project done for the user `jrpinzong` specificall
 
 ### Fourth Step: Create the Tables in pgAdmin
 > Go to the link: http://localhost/, once there in pgAdmin introduce `admin@admin.com` as Email and `admin` as password
+
 > Register a new server and put the next configurations:
 
 ![image](https://user-images.githubusercontent.com/86843637/208324315-b9069136-bfc4-45cb-a371-7edb76bc5628.png)
 
 ![image](https://user-images.githubusercontent.com/86843637/208324323-9f26eec0-4052-41ad-b2c7-d03e87368a00.png)
 
+> **The password is `R2D2-333`**
+
 > In DataBase go directly to Schemas > Tables and in the Query Tool introduce the commands stated in `create_tables.sql`
+
 > This will create three tables Users, Password and Tweets
 
 ![image](https://user-images.githubusercontent.com/86843637/208324554-5a221b3d-ddd7-4ec9-becc-32199d5cbcb9.png)

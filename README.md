@@ -60,3 +60,5 @@ The project is based in a CRUD project done for the user `jrpinzong` specificall
 
 ### Extra Step: Stop the containers
 > Simply execute `docker-compose stop` to stop the containers
+
+##### NOTE: For more docker-compose commands please review the documentation in the next link https://docs.docker.com/engine/reference/commandline/compose/
